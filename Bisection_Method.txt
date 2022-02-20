@@ -1,0 +1,86 @@
+Given, 
+continuous function, f 
+precision, delta
+left_bound, xL
+right_bound, xR
+
+
+Initial Upper bound guess, b = 1
+
+
+Pseudo Code
+-----------
+This Pseudo-code shall determine an estimate of 'xO' the root of continuous function 'f',
+using bisection method. We return the estimate of xO based on given precision 'delta'.
+
+
+BEGIN
+function bisection_method(F, DELTA, xL, xR)
+    BEGIN
+    # Assuming given xL, xR are valid and follow, F(xL) * F(xR) < 0.
+    # Looping over the search space untill we get the desired precision for the
+    # value of function at the estimated point.
+    while abs(F(xO))>DELTA
+        # Calculating middle point as an estimate.
+        xO = xL + ((xR - xL) / 2)
+        
+        # If function values at xL, xO have same sign then, their product is positive.
+        # We move our left bound to middle point, and proceed reduced search space.
+        if F(xL) * F(xO) > 0
+            xL = xO
+        
+        # Else if function values at xL, xO have opposite sign then, their product is negative.
+        # We move our Right bound to middle point, and proceed with reduced search space.
+        else if F(xL) * F(xO) < 0
+            xR = xO
+
+        # Else the function value should be equal to zero at the estimate xO. So, we end the search
+        # and return the xO
+        else
+            return xO
+    
+    # When the execution comes out of loop, the function value has got the desired
+    # precision, so we return xO
+    return xO
+    END
+
+
+F = <input_function>
+DELTA = <input_precision>
+xL = <input_left_bound>
+xR = <input_right_bound>
+estimated_root = bisection_method(F, DELTA, xL, xR)
+END
+
+
+Complexity Analysis
+-------------------
+# '^' below implies power. eg: 2^4 = 2 * 2 * 2 * 2 = 16
+
+DELTA = 2^(-n)
+
+Size of the interval (xL, xR) is 'K'.
+abs(xL - xR) = K or xL = xR - K, xR = xL + K
+
+
+In each iteration we reduce the search space by half and move towards the true root.
+The size of the interval also, reduces by half.
+
+After 'M' iterations, the size of the interval becomes K/(2^M).
+The Mth estimated root shall be 'xM'.
+So, the difference between Mth estimated root and true root shall satisfy the relation,
+--> abs(xM - xT) <= K/(2^M)
+This implies the precision should be greater than the size of interval after 'M' iterations,
+to find the best estimate.
+--> K/(2^M) < DELTA
+--> K < DELTA * (2^M)
+in other words,
+--> 2^M > K / DELTA
+--> M > log (K/DELTA)
+
+The minimum no.of iterations is M = log(K/DELTA)
+
+so, The time complexity is approximately O(log(abs(xL - xR)/DELTA)).
+
+The complexity of time is O(log(size_of_initial_interval / precision))
+The complexity of space is O(1)

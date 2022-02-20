@@ -1,0 +1,101 @@
+Given, 
+Sorted list, A = [a1, a2, a3, a4, ....., ai]
+Search key, key
+Initial Upper bound guess, b = 1
+
+
+Pseudo Code
+-----------
+This Pseudo-code shall perform an exponential search over a sorted list, to
+find the given key. If the key is inside the list, we return the index of
+key, otherwise we display key not found and return -1.
+
+Exponential Search shall use the binary search. So, the pseudo code for binary search
+function is also provided below.
+
+
+BEGIN
+function binary_search(A, lower_bound, upper_bound, key)
+    BEGIN
+    # Looping over the search space, If lower bound is less than upper bound, the key can be
+    # searched inside the list.
+    while lower_bound<upper_bound
+        # assign mid_index as approximate mid point between lower and upper bounds
+        mid_index = lower_bound + ((upper_bound - lower_bound) / 2)
+
+        # assign mid_value as the value of the mid_index from the sorted list A
+        mid_value = A[mid_index]
+
+        # If key is less the mid_value, then we move our upper bound to index just
+        # before mid_index and proceed to search on left sub-array.
+        if key < mid_value
+            upper_bound = mid_index-1
+        
+        # Else if key is greater than the mid_value, then we move our lower bound to
+        # index just after mid_index and proceed to search on right sub-array.
+        else if key > mid_value
+            lower_bound = mid_index+1
+        
+        # Else the key should be equal to mid_value. So, we end the search
+        # and return the mid_index
+        else
+            return mid_index
+
+    # Else lower bound and upper bound are not appropriate, the key cannot be searched
+    # inside the list.
+    display "Search Key is not found in the given list"
+    return -1
+    END
+
+
+function exponential_search(A, key)
+    BEGIN
+    # In application, the sorted list is finite and has a length.
+    # Let's assume length of A to be N
+    N = find_length(A)
+    
+    # Initialize upper_bound guess b as 1
+    b = 1
+
+    # Looping over the upper bound guess b untill we make it big enough for searching
+    # the key and also, we don't exceed the length of A
+    # If the key is greater than the value at the b's index, then we double the value
+    # of b to make it big enough for searching the key.
+    # Else we found the value of b, such that the search key is within the upper bound b
+    # We shall terminate the loop as we found a good enough b.
+    while key>A[b] and b>N
+        # assign b as b multiplied by 2
+        b = b * 2
+
+    # We perform a binary search to find the key.
+    search_result = binary_search(A, b/2, minimum(b, N-1), key)
+    return search_result
+    END
+
+
+A = <input_sorted_list>
+key = <input search key>
+search_index = exponential_search(A, key)
+END
+
+
+Complexity Analysis
+-------------------
+if ak = key, where is k is index of the key
+m = step(log(k)), where step(x) is largest integer less than x
+
+# '^' below implies power. eg: 2^4 = 2 * 2 * 2 * 2 = 16
+
+1) exponential_search shall reduce the search space for finding the (0, N)
+    to (2^m, 2^(m + 1)) or (2^m, N-1).
+    The length of reduced search space is 2^m.
+    The loop runs for m + 1 times to reducd the search space.
+    m + 1 --> log(k) + 1 --> O(log(k))  (approximately)
+2) binary_search shall be run on sub array with 2^m elements.
+    The sub-aray is divided into two halves, m times, to reach the search key.
+    m --> log(k) --> O(log(k))
+3) New variables introduced have a constant memory.
+    Array is not modified or sliced to a subarray.
+
+The complexity of time is O(log(k))
+The complexity of space is O(1)
