@@ -4,10 +4,6 @@ precision, delta
 left_bound, xL
 right_bound, xR
 
-
-Initial Upper bound guess, b = 1
-
-
 Pseudo Code
 -----------
 This Pseudo-code shall determine an estimate of 'xO' the root of continuous function 'f',
